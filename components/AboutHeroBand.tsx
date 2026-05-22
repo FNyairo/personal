@@ -2,26 +2,26 @@
 import { useEffect, useRef } from 'react';
 
 const KEYWORDS = [
-  { text: 'TPACK', size: 2.2 },
-  { text: 'Maritime English', size: 1.6 },
-  { text: 'Instructional Design', size: 1.8 },
-  { text: 'EdTech', size: 2.4 },
-  { text: 'Blended Learning', size: 1.5 },
-  { text: 'UDL', size: 2.0 },
-  { text: 'PhD Researcher', size: 1.4 },
-  { text: 'ESP', size: 2.2 },
-  { text: 'iMASTER', size: 1.7 },
-  { text: 'DBR', size: 1.9 },
-  { text: 'Curriculum Design', size: 1.5 },
-  { text: 'Novia UAS', size: 1.6 },
-  { text: 'Mixed Methods', size: 1.4 },
-  { text: 'DigiMar', size: 1.8 },
-  { text: 'STCW', size: 1.6 },
-  { text: 'Finland · Kenya', size: 1.5 },
-  { text: 'Multimedia Learning', size: 1.3 },
-  { text: 'SMCP', size: 2.0 },
-  { text: 'EFL Teacher Education', size: 1.4 },
-  { text: 'Data Analytics', size: 1.6 },
+  { text: 'Teacher Education', size: 2.2 },
+  { text: 'Education Technology', size: 2.0 },
+  { text: 'Instructional Design', size: 2.3 },
+  { text: 'TPACK by Design', size: 2.1 },
+  { text: 'Universal Design for Learning', size: 1.6 },
+  { text: 'Maritime English', size: 2.0 },
+  { text: 'Corporate Training & Communication', size: 1.5 },
+  { text: 'Project Management', size: 1.9 },
+  { text: 'Blended Learning', size: 1.7 },
+  { text: 'iMASTER', size: 1.8 },
+  { text: 'DigiMar', size: 1.7 },
+  { text: 'Finland · Kenya', size: 1.6 },
+  { text: 'Curriculum Design', size: 1.6 },
+  { text: 'Mixed Methods', size: 1.5 },
+  { text: 'PhD Researcher', size: 1.8 },
+  { text: 'STCW', size: 2.0 },
+  { text: 'SMCP', size: 1.9 },
+  { text: 'Data Analytics', size: 1.7 },
+  { text: 'Multimedia Learning', size: 1.6 },
+  { text: 'DBR', size: 1.8 },
 ];
 
 type Keyword = {
@@ -38,10 +38,14 @@ type Keyword = {
 };
 
 const COLORS = [
-  'rgba(96,165,250,',   // electric blue
-  'rgba(45,212,191,',   // teal
-  'rgba(167,139,250,',  // purple
-  'rgba(248,255,255,',  // near white
+  'rgba(96,165,250,',    // electric blue
+  'rgba(45,212,191,',    // teal
+  'rgba(167,139,250,',   // soft purple
+  'rgba(248,255,255,',   // near white
+  'rgba(125,211,252,',   // sky blue
+  'rgba(94,234,212,',    // mint
+  'rgba(196,181,253,',   // lavender
+  'rgba(147,197,253,',   // pale blue
 ];
 
 export default function AboutHeroBand() {
