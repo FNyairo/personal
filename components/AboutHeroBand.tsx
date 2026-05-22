@@ -4,11 +4,11 @@ import { useEffect, useRef } from 'react';
 // ── STATIC keywords — core identity, fixed positions ─────────────────────────
 // align: 'left' | 'center' | 'right'
 const STATIC_KEYWORDS = [
-  { text: 'Instructional Design', x: 0.02, y: 0.52, align: 'left'   }, // Left, middle
-  { text: 'Teacher Education',    x: 0.50, y: 0.18, align: 'center' }, // Top, center
-  { text: 'Doctoral Researcher',  x: 0.50, y: 0.55, align: 'center' }, // Center, middle
-  { text: 'Maritime English',     x: 0.50, y: 0.88, align: 'center' }, // Bottom, center
-  { text: 'Project Management',   x: 0.98, y: 0.52, align: 'right'  }, // Right, middle
+  { text: 'Instructional Design', x: 0.02, y: 0.52, align: 'left'   }, // Far left, middle
+  { text: 'Teacher Education',    x: 0.25, y: 0.18, align: 'center' }, // Left-center, top
+  { text: 'Doctoral Researcher',  x: 0.50, y: 0.52, align: 'center' }, // Center, middle
+  { text: 'Maritime English',     x: 0.75, y: 0.86, align: 'center' }, // Right-center, bottom
+  { text: 'Project Management',   x: 0.98, y: 0.52, align: 'right'  }, // Far right, middle
 ];
 
 // ── DYNAMIC keywords — methods & frameworks, drift around ────────────────────
