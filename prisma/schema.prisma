@@ -1,0 +1,138 @@
+// Prisma schema for Franklin Nyairo personal website
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  @@map("users")
+}
+
+model Stats {
+  id    String @id @default(cuid())
+  key   String @unique
+  value Int    @default(0)
+  label String @default("")
+
+  @@map("stats")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  longDesc    String?
+  status      String   // "current" | "past" | "collaboration"
+  imageUrl    String
+  tags        String[]
+  links       Json?    // { publication?: string, demo?: string, github?: string }
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@map("projects")
+}
+
+model Post {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  content     Json          // TipTap JSON
+  excerpt     String
+  coverImage  String
+  tags        String[]
+  published   Boolean       @default(false)
+  readingTime Int           @default(5) // minutes
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  comments    PostComment[]
+
+  @@map("posts")
+}
+
+model PostComment {
+  id        String   @id @default(cuid())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  name      String
+  email     String
+  content   String
+  approved  Boolean  @default(true) // set false to require moderation
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@map("post_comments")
+}
+
+model DiscussionThread {
+  id          String             @id @default(cuid())
+  subject     String
+  userName    String
+  userEmail   String
+  message     String?
+  documentUrl String?
+  ipAddress   String?
+  country     String?
+  city        String?
+  createdAt   DateTime           @default(now())
+  comments    DiscussionComment[]
+
+  @@map("discussion_threads")
+}
+
+model DiscussionComment {
+  id        String           @id @default(cuid())
+  thread    DiscussionThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  threadId  String
+  userName  String
+  userEmail String
+  isAdmin   Boolean          @default(false)
+  content   String
+  ipAddress String?
+  country   String?
+  city      String?
+  createdAt DateTime         @default(now())
+
+  @@map("discussion_comments")
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  ipAddress String?
+  country   String?
+  city      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("contact_messages")
+}
+
+model VisitorLog {
+  id          String   @id @default(cuid())
+  ipAddress   String
+  country     String?
+  countryCode String?
+  city        String?
+  region      String?
+  lat         Float?
+  lon         Float?
+  pageVisited String
+  userAgent   String?
+  timestamp   DateTime @default(now())
+
+  @@map("visitor_logs")
+}
