@@ -1,34 +1,41 @@
 'use client';
 import { useEffect, useRef } from 'react';
 
-// ── STATIC keywords — core identity, fixed positions ─────────────────────────
-// align: 'left' | 'center' | 'right'
+// ── STATIC anchors — core identity ───────────────────────────────────────────
 const STATIC_KEYWORDS = [
-  { text: 'Instructional Design', x: 0.02, y: 0.52, align: 'left'   }, // Far left, middle
-  { text: 'Teacher Education',    x: 0.25, y: 0.18, align: 'center' }, // Left-center, top
-  { text: 'Doctoral Researcher',  x: 0.50, y: 0.52, align: 'center' }, // Center, middle
-  { text: 'Maritime English',     x: 0.75, y: 0.86, align: 'center' }, // Right-center, bottom
-  { text: 'Project Management',   x: 0.98, y: 0.52, align: 'right'  }, // Far right, middle
+  { text: 'Instructional Design', x: 0.02, y: 0.52, align: 'left'   },
+  { text: 'Teacher Education',    x: 0.25, y: 0.18, align: 'center' },
+  { text: 'Doctoral Researcher',  x: 0.50, y: 0.52, align: 'center' },
+  { text: 'Maritime English',     x: 0.75, y: 0.86, align: 'center' },
+  { text: 'Project Management',   x: 0.98, y: 0.52, align: 'right'  },
 ];
 
-// ── DYNAMIC keywords — methods & frameworks, drift around ────────────────────
-const DYNAMIC_KEYWORDS = [
-  'TPACK by Design',
-  'Universal Design for Learning',
-  'Blended Learning',
-  'Curriculum Design',
-  'Mixed Methods',
-  'Data Analytics',
-  'Multimedia Learning',
-  'DBR',
-  'STCW',
-  'SMCP',
-  'Education Technology',
-  'Corporate Training & Communication',
-  'Finland · Kenya',
+// ── DYNAMIC clusters — each word orbits its anchor ───────────────────────────
+const CLUSTERS = [
+  // Instructional Design (index 0) — Far Left
+  { text: 'Blended Learning',        anchorIndex: 0, orbitR: 0.14 },
+  { text: 'Learning Analytics',      anchorIndex: 0, orbitR: 0.13 },
+  { text: 'Design-Based Research',   anchorIndex: 0, orbitR: 0.16 },
+
+  // Teacher Education (index 1) — Top Left
+  { text: 'TPACK by Design',               anchorIndex: 1, orbitR: 0.13 },
+  { text: 'Universal Design for Learning', anchorIndex: 1, orbitR: 0.16 },
+  { text: 'Mixed Methods',                 anchorIndex: 1, orbitR: 0.12 },
+
+  // Doctoral Researcher (index 2) — Center
+  { text: 'Education Technology', anchorIndex: 2, orbitR: 0.13 },
+  { text: 'Finland · Kenya',      anchorIndex: 2, orbitR: 0.14 },
+
+  // Maritime English (index 3) — Bottom Right
+  { text: 'STCW', anchorIndex: 3, orbitR: 0.10 },
+  { text: 'SMCP', anchorIndex: 3, orbitR: 0.10 },
+
+  // Project Management (index 4) — Far Right
+  { text: 'Corporate Training & Communication', anchorIndex: 4, orbitR: 0.15 },
+  { text: 'Data Analytics',                     anchorIndex: 4, orbitR: 0.12 },
 ];
 
-const DYNAMIC_COLORS = [
+const COLORS = [
   'rgba(96,165,250,',    // electric blue
   'rgba(45,212,191,',    // teal
   'rgba(167,139,250,',   // soft purple
@@ -41,10 +48,11 @@ const DYNAMIC_COLORS = [
 
 type DriftWord = {
   text: string;
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
+  anchorXRatio: number;
+  anchorYRatio: number;
+  orbitR: number;
+  angle: number;
+  angleSpeed: number;
   fontSize: number;
   opacity: number;
   targetOpacity: number;
@@ -54,8 +62,8 @@ type DriftWord = {
 
 export default function AboutHeroBand() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animRef = useRef<number>(0);
-  const driftRef = useRef<DriftWord[]>([]);
+  const animRef   = useRef<number>(0);
+  const wordsRef  = useRef<DriftWord[]>([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -64,28 +72,29 @@ export default function AboutHeroBand() {
     if (!ctx) return;
 
     const resize = () => {
-      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+      canvas.width  = canvas.offsetWidth  * window.devicePixelRatio;
       canvas.height = canvas.offsetHeight * window.devicePixelRatio;
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      initDrift();
+      init();
     };
 
-    function initDrift() {
-      const w = canvas!.offsetWidth;
-      const h = canvas!.offsetHeight;
-      // Keep words well inside — use 20%–80% of width, 15%–85% of height
-      driftRef.current = DYNAMIC_KEYWORDS.map((text) => ({
-        text,
-        x: w * 0.20 + Math.random() * w * 0.55,
-        y: h * 0.15 + Math.random() * h * 0.70,
-        vx: (Math.random() - 0.5) * 0.28,
-        vy: (Math.random() - 0.5) * 0.28,
-        fontSize: Math.random() * 4 + 16,
-        opacity: Math.random() * 0.35 + 0.15,
-        targetOpacity: Math.random() * 0.45 + 0.20,
-        opacitySpeed: Math.random() * 0.003 + 0.001,
-        color: DYNAMIC_COLORS[Math.floor(Math.random() * DYNAMIC_COLORS.length)],
-      }));
+    function init() {
+      wordsRef.current = CLUSTERS.map((c) => {
+        const anchor = STATIC_KEYWORDS[c.anchorIndex];
+        return {
+          text: c.text,
+          anchorXRatio: anchor.x,
+          anchorYRatio: anchor.y,
+          orbitR: c.orbitR,
+          angle: Math.random() * Math.PI * 2,
+          angleSpeed: (Math.random() * 0.003 + 0.001) * (Math.random() < 0.5 ? 1 : -1),
+          fontSize: Math.random() * 3 + 15,
+          opacity: Math.random() * 0.35 + 0.20,
+          targetOpacity: Math.random() * 0.50 + 0.25,
+          opacitySpeed: Math.random() * 0.003 + 0.001,
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        };
+      });
     }
 
     function draw() {
@@ -93,59 +102,53 @@ export default function AboutHeroBand() {
       const h = canvas!.offsetHeight;
       ctx!.clearRect(0, 0, w, h);
 
-      // ── Draw dynamic (drifting) words ──────────────────────────────────────
-      driftRef.current.forEach((kw) => {
-        kw.x += kw.vx;
-        kw.y += kw.vy;
+      // ── Dynamic clustered words ─────────────────────────────────────────
+      wordsRef.current.forEach((kw) => {
+        kw.angle += kw.angleSpeed;
 
-        // Measure text width so long phrases bounce before clipping
-        ctx!.font = `400 ${kw.fontSize}px Inter, sans-serif`;
-        const textW = ctx!.measureText(kw.text).width;
-        const leftBound  = w * 0.12;
-        const rightBound = w * 0.88 - textW;
-        const topBound   = h * 0.12;
-        const botBound   = h * 0.88;
+        const ax = kw.anchorXRatio * w;
+        const ay = kw.anchorYRatio * h;
+        const rx = kw.orbitR * w;
+        const ry = kw.orbitR * h * 0.7;
 
-        if (kw.x < leftBound)  { kw.x = leftBound;  kw.vx = Math.abs(kw.vx); }
-        if (kw.x > rightBound) { kw.x = rightBound; kw.vx = -Math.abs(kw.vx); }
-        if (kw.y < topBound)   { kw.y = topBound;   kw.vy = Math.abs(kw.vy); }
-        if (kw.y > botBound)   { kw.y = botBound;   kw.vy = -Math.abs(kw.vy); }
+        const x = ax + Math.cos(kw.angle) * rx;
+        const y = ay + Math.sin(kw.angle) * ry;
 
         // Pulse opacity
         if (kw.opacity < kw.targetOpacity) {
           kw.opacity = Math.min(kw.opacity + kw.opacitySpeed, kw.targetOpacity);
         } else {
-          kw.opacity = Math.max(kw.opacity - kw.opacitySpeed, 0.08);
-          if (kw.opacity <= 0.08) kw.targetOpacity = Math.random() * 0.45 + 0.20;
+          kw.opacity = Math.max(kw.opacity - kw.opacitySpeed, 0.10);
+          if (kw.opacity <= 0.10) kw.targetOpacity = Math.random() * 0.50 + 0.25;
         }
 
         ctx!.font = `400 ${kw.fontSize}px Inter, sans-serif`;
+        ctx!.textAlign = 'center';
         ctx!.fillStyle = `${kw.color}${kw.opacity})`;
-        ctx!.fillText(kw.text, kw.x, kw.y);
+        ctx!.fillText(kw.text, x, y);
       });
 
-      // ── Draw static (anchored) words ───────────────────────────────────────
+      // ── Static anchor words ─────────────────────────────────────────────
       STATIC_KEYWORDS.forEach((kw) => {
         const x = kw.x * w;
         const y = kw.y * h;
         ctx!.font = `600 20px Inter, sans-serif`;
         ctx!.textAlign = kw.align as CanvasTextAlign;
-        ctx!.fillStyle = 'rgba(248,255,255,0.78)';
+        ctx!.fillStyle = 'rgba(248,255,255,0.82)';
         ctx!.fillText(kw.text, x, y);
 
-        // Subtle teal underline accent
+        // Teal underline
         const metrics = ctx!.measureText(kw.text);
-        let lineX = x;
-        if (kw.align === 'center') lineX = x - metrics.width / 2;
-        if (kw.align === 'right')  lineX = x - metrics.width;
+        let lx = x;
+        if (kw.align === 'center') lx = x - metrics.width / 2;
+        if (kw.align === 'right')  lx = x - metrics.width;
         ctx!.beginPath();
-        ctx!.moveTo(lineX, y + 4);
-        ctx!.lineTo(lineX + metrics.width, y + 4);
-        ctx!.strokeStyle = 'rgba(45,212,191,0.40)';
+        ctx!.moveTo(lx, y + 4);
+        ctx!.lineTo(lx + metrics.width, y + 4);
+        ctx!.strokeStyle = 'rgba(45,212,191,0.45)';
         ctx!.lineWidth = 1.5;
         ctx!.stroke();
 
-        // Reset alignment for dynamic words
         ctx!.textAlign = 'left';
       });
 
@@ -163,18 +166,13 @@ export default function AboutHeroBand() {
 
   return (
     <div className="relative h-48 overflow-hidden">
-      {/* Gradient background */}
       <div className="absolute inset-0 bg-gradient-to-r from-navy-900 via-electric-500/10 to-teal-500/10" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-navy-900/10 to-navy-900" />
-
-      {/* Canvas */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
         style={{ mixBlendMode: 'screen' }}
       />
-
-      {/* Subtle centre label */}
       <div className="absolute inset-0 flex items-end justify-center pb-3 pointer-events-none">
         <p className="text-xs font-medium text-electric-400/40 uppercase tracking-[0.3em]">
           Research · Education · Innovation
