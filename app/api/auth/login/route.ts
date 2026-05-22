@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { signToken, setAuthCookie } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 // Simple in-memory rate limiter (per IP)
 const attempts = new Map<string, { count: number; resetAt: number }>();
 
