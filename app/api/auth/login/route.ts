@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
-import { prisma } from '@/lib/prisma';
 import { signToken, setAuthCookie } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
@@ -12,7 +10,7 @@ function isRateLimited(ip: string): boolean {
   const now = Date.now();
   const entry = attempts.get(ip);
   if (!entry || now > entry.resetAt) {
-    attempts.set(ip, { count: 1, resetAt: now + 15 * 60 * 1000 }); // 15 min window
+    attempts.set(ip, { count: 1, resetAt: now + 15 * 60 * 1000 });
     return false;
   }
   if (entry.count >= 10) return true;
@@ -33,18 +31,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Email and password required.' }, { status: 400 });
   }
 
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    return NextResponse.json({ error: 'Invalid credentials.' }, { status: 401 });
+  try {
+    const bcrypt = await import('bcryptjs');
+    const { prisma } = await import('@/lib/prisma');
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return NextResponse.json({ error: 'Invalid credentials.' }, { status: 401 });
+    }
+
+    const valid = await bcrypt.compare(password, user.passwordHash);
+    if (!valid) {
+      return NextResponse.json({ error: 'Invalid credentials.' }, { status: 401 });
+    }
+
+    const token = await signToken({ userId: user.id, email: user.email });
+    setAuthCookie(token);
+
+    return NextResponse.json({ ok: true });
+  } catch {
+    return NextResponse.json({ error: 'Service unavailable.' }, { status: 503 });
   }
-
-  const valid = await bcrypt.compare(password, user.passwordHash);
-  if (!valid) {
-    return NextResponse.json({ error: 'Invalid credentials.' }, { status: 401 });
-  }
-
-  const token = await signToken({ userId: user.id, email: user.email });
-  setAuthCookie(token);
-
-  return NextResponse.json({ ok: true });
 }
