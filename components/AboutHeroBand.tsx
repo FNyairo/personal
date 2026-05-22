@@ -1,57 +1,60 @@
 'use client';
 import { useEffect, useRef } from 'react';
 
-const KEYWORDS = [
-  { text: 'Teacher Education', size: 2.2 },
-  { text: 'Education Technology', size: 2.0 },
-  { text: 'Instructional Design', size: 2.3 },
-  { text: 'TPACK by Design', size: 2.1 },
-  { text: 'Universal Design for Learning', size: 1.6 },
-  { text: 'Maritime English', size: 2.0 },
-  { text: 'Corporate Training & Communication', size: 1.5 },
-  { text: 'Project Management', size: 1.9 },
-  { text: 'Blended Learning', size: 1.7 },
-  { text: 'iMASTER', size: 1.8 },
-  { text: 'DigiMar', size: 1.7 },
-  { text: 'Finland · Kenya', size: 1.6 },
-  { text: 'Curriculum Design', size: 1.6 },
-  { text: 'Mixed Methods', size: 1.5 },
-  { text: 'PhD Researcher', size: 1.8 },
-  { text: 'STCW', size: 2.0 },
-  { text: 'SMCP', size: 1.9 },
-  { text: 'Data Analytics', size: 1.7 },
-  { text: 'Multimedia Learning', size: 1.6 },
-  { text: 'DBR', size: 1.8 },
+// ── STATIC keywords — core identity, fixed positions ─────────────────────────
+const STATIC_KEYWORDS = [
+  { text: 'Instructional Design', x: 0.12, y: 0.28 },
+  { text: 'Teacher Education',    x: 0.38, y: 0.55 },
+  { text: 'Maritime English',     x: 0.62, y: 0.30 },
+  { text: 'Project Management',   x: 0.82, y: 0.58 },
+  { text: 'PhD Researcher',       x: 0.50, y: 0.20 },
 ];
 
-type Keyword = {
+// ── DYNAMIC keywords — methods & frameworks, drift around ────────────────────
+const DYNAMIC_KEYWORDS = [
+  'TPACK by Design',
+  'Universal Design for Learning',
+  'Blended Learning',
+  'Curriculum Design',
+  'Mixed Methods',
+  'Data Analytics',
+  'Multimedia Learning',
+  'DBR',
+  'STCW',
+  'SMCP',
+  'Education Technology',
+  'Corporate Training & Communication',
+  'Finland · Kenya',
+];
+
+const DYNAMIC_COLORS = [
+  'rgba(96,165,250,',    // electric blue
+  'rgba(45,212,191,',    // teal
+  'rgba(167,139,250,',   // soft purple
+  'rgba(125,211,252,',   // sky blue
+  'rgba(94,234,212,',    // mint
+  'rgba(196,181,253,',   // lavender
+  'rgba(147,197,253,',   // pale blue
+  'rgba(248,255,255,',   // near white
+];
+
+type DriftWord = {
   text: string;
   x: number;
   y: number;
   vx: number;
   vy: number;
-  size: number;
+  fontSize: number;
   opacity: number;
   targetOpacity: number;
   opacitySpeed: number;
   color: string;
 };
 
-const COLORS = [
-  'rgba(96,165,250,',    // electric blue
-  'rgba(45,212,191,',    // teal
-  'rgba(167,139,250,',   // soft purple
-  'rgba(248,255,255,',   // near white
-  'rgba(125,211,252,',   // sky blue
-  'rgba(94,234,212,',    // mint
-  'rgba(196,181,253,',   // lavender
-  'rgba(147,197,253,',   // pale blue
-];
-
 export default function AboutHeroBand() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
-  const keywordsRef = useRef<Keyword[]>([]);
+  const driftRef = useRef<DriftWord[]>([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -63,23 +66,23 @@ export default function AboutHeroBand() {
       canvas.width = canvas.offsetWidth * window.devicePixelRatio;
       canvas.height = canvas.offsetHeight * window.devicePixelRatio;
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      initKeywords();
+      initDrift();
     };
 
-    function initKeywords() {
+    function initDrift() {
       const w = canvas!.offsetWidth;
       const h = canvas!.offsetHeight;
-      keywordsRef.current = KEYWORDS.map((kw) => ({
-        text: kw.text,
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        size: kw.size,
-        opacity: Math.random() * 0.5 + 0.2,
-        targetOpacity: Math.random() * 0.6 + 0.25,
-        opacitySpeed: Math.random() * 0.004 + 0.002,
-        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      driftRef.current = DYNAMIC_KEYWORDS.map((text) => ({
+        text,
+        x: Math.random() * (w - 160) + 80,
+        y: Math.random() * (h - 24) + 16,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        fontSize: Math.random() * 4 + 11,
+        opacity: Math.random() * 0.35 + 0.15,
+        targetOpacity: Math.random() * 0.45 + 0.20,
+        opacitySpeed: Math.random() * 0.003 + 0.001,
+        color: DYNAMIC_COLORS[Math.floor(Math.random() * DYNAMIC_COLORS.length)],
       }));
     }
 
@@ -88,29 +91,44 @@ export default function AboutHeroBand() {
       const h = canvas!.offsetHeight;
       ctx!.clearRect(0, 0, w, h);
 
-      keywordsRef.current.forEach((kw) => {
-        // Move
+      // ── Draw dynamic (drifting) words ──────────────────────────────────────
+      driftRef.current.forEach((kw) => {
         kw.x += kw.vx;
         kw.y += kw.vy;
 
-        // Bounce off edges with padding
-        const pad = 80;
+        const pad = 90;
         if (kw.x < pad || kw.x > w - pad) kw.vx *= -1;
-        if (kw.y < 16 || kw.y > h - 16) kw.vy *= -1;
+        if (kw.y < 16  || kw.y > h - 16)  kw.vy *= -1;
 
         // Pulse opacity
         if (kw.opacity < kw.targetOpacity) {
           kw.opacity = Math.min(kw.opacity + kw.opacitySpeed, kw.targetOpacity);
         } else {
-          kw.opacity = Math.max(kw.opacity - kw.opacitySpeed, 0.12);
-          if (kw.opacity <= 0.12) kw.targetOpacity = Math.random() * 0.6 + 0.25;
+          kw.opacity = Math.max(kw.opacity - kw.opacitySpeed, 0.08);
+          if (kw.opacity <= 0.08) kw.targetOpacity = Math.random() * 0.45 + 0.20;
         }
 
-        // Draw text
-        const fontSize = kw.size * 13;
-        ctx!.font = `${kw.opacity > 0.45 ? '600' : '400'} ${fontSize}px Inter, sans-serif`;
+        ctx!.font = `400 ${kw.fontSize}px Inter, sans-serif`;
         ctx!.fillStyle = `${kw.color}${kw.opacity})`;
         ctx!.fillText(kw.text, kw.x, kw.y);
+      });
+
+      // ── Draw static (anchored) words ───────────────────────────────────────
+      STATIC_KEYWORDS.forEach((kw) => {
+        const x = kw.x * w;
+        const y = kw.y * h;
+        ctx!.font = `600 16px Inter, sans-serif`;
+        ctx!.fillStyle = 'rgba(248,255,255,0.72)';
+        ctx!.fillText(kw.text, x, y);
+
+        // Subtle underline accent
+        const metrics = ctx!.measureText(kw.text);
+        ctx!.beginPath();
+        ctx!.moveTo(x, y + 4);
+        ctx!.lineTo(x + metrics.width, y + 4);
+        ctx!.strokeStyle = 'rgba(45,212,191,0.35)';
+        ctx!.lineWidth = 1.5;
+        ctx!.stroke();
       });
 
       animRef.current = requestAnimationFrame(draw);
@@ -119,7 +137,6 @@ export default function AboutHeroBand() {
     resize();
     draw();
     window.addEventListener('resize', resize);
-
     return () => {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener('resize', resize);
@@ -128,24 +145,22 @@ export default function AboutHeroBand() {
 
   return (
     <div className="relative h-48 overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-navy-900 via-electric-500/10 to-teal-500/10 animate-gradient" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-navy-900/20 to-navy-900" />
+      {/* Gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-navy-900 via-electric-500/10 to-teal-500/10" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-navy-900/10 to-navy-900" />
 
-      {/* Floating keyword canvas */}
+      {/* Canvas */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
         style={{ mixBlendMode: 'screen' }}
       />
 
-      {/* Centre label */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="text-center">
-          <p className="text-xs font-medium text-electric-400/60 uppercase tracking-[0.3em]">
-            Research · Education · Innovation
-          </p>
-        </div>
+      {/* Subtle centre label */}
+      <div className="absolute inset-0 flex items-end justify-center pb-3 pointer-events-none">
+        <p className="text-xs font-medium text-electric-400/40 uppercase tracking-[0.3em]">
+          Research · Education · Innovation
+        </p>
       </div>
     </div>
   );
