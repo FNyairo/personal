@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import AboutHeroBand from '@/components/AboutHeroBand';
 import { FileText, MapPin, Mail, Globe } from 'lucide-react';
 
 const funFacts = [
@@ -30,14 +31,8 @@ export default function AboutPage() {
     <>
       <Navigation />
       <main className="pt-24">
-        {/* Page banner */}
-        <div className="relative h-44 overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-navy-900/70 via-navy-900/60 to-navy-900" />
-        </div>
+        {/* Animated keyword band */}
+        <AboutHeroBand />
 
         {/* Hero split layout */}
         <section className="section-container py-16">
