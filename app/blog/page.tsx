@@ -2,6 +2,8 @@ export const dynamic = 'force-dynamic';
 
 import type { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
+import StarBackground from '@/components/StarBackground';
+import { BLOG_SKY } from '@/lib/constellations';
 import Footer from '@/components/Footer';
 import { prisma } from '@/lib/prisma';
 import BlogList from './BlogList';
@@ -26,6 +28,7 @@ export default async function BlogPage() {
 
   return (
     <>
+      <StarBackground constellations={BLOG_SKY} />
       <Navigation />
       <main className="pt-24">
         {/* Blog header banner */}

@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
+import StarBackground from '@/components/StarBackground';
+import { BLOG_POST_SKY } from '@/lib/constellations';
 import Footer from '@/components/Footer';
 import { prisma } from '@/lib/prisma';
 import { formatDate } from '@/lib/utils';
@@ -37,6 +39,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   return (
     <>
+      <StarBackground constellations={BLOG_POST_SKY} />
       <Navigation />
       <main className="pt-24">
         {/* Cover image */}

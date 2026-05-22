@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
+import StarBackground from '@/components/StarBackground';
+import { BOOK_SKY } from '@/lib/constellations';
 import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
@@ -12,6 +14,7 @@ export default function BookPage() {
 
   return (
     <>
+      <StarBackground constellations={BOOK_SKY} />
       <Navigation />
       <main className="pt-24">
         <section className="section-container py-12">

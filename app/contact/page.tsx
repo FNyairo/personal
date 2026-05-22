@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
+import StarBackground from '@/components/StarBackground';
+import { CONTACT_SKY } from '@/lib/constellations';
 import Footer from '@/components/Footer';
 import ContactForm from './ContactForm';
 import { MapPin, Mail, Phone, ExternalLink, BookOpen } from 'lucide-react';
@@ -12,6 +14,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
+      <StarBackground constellations={CONTACT_SKY} />
       <Navigation />
       <main className="pt-24">
         <section className="section-container py-12">

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
+import StarBackground from '@/components/StarBackground';
+import { RESUME_SKY } from '@/lib/constellations';
 import Footer from '@/components/Footer';
 import ResumeNav from './ResumeNav';
 import { Download } from 'lucide-react';
@@ -12,6 +14,7 @@ export const metadata: Metadata = {
 export default function ResumePage() {
   return (
     <>
+      <StarBackground constellations={RESUME_SKY} />
       <Navigation />
       <main className="pt-24 pb-20">
         <div className="section-container max-w-4xl">

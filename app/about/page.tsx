@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Navigation from '@/components/Navigation';
+import StarBackground from '@/components/StarBackground';
+import { ABOUT_SKY } from '@/lib/constellations';
 import Footer from '@/components/Footer';
 import AboutHeroBand from '@/components/AboutHeroBand';
 import { FileText, MapPin, Mail, Globe } from 'lucide-react';
@@ -29,6 +31,7 @@ export default function AboutPage() {
 
   return (
     <>
+      <StarBackground constellations={ABOUT_SKY} />
       <Navigation />
       <main className="pt-24">
         {/* Animated keyword band */}

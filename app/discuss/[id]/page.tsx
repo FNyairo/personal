@@ -2,6 +2,8 @@ export const dynamic = 'force-dynamic';
 
 import { notFound } from 'next/navigation';
 import Navigation from '@/components/Navigation';
+import StarBackground from '@/components/StarBackground';
+import { DISCUSS_SKY } from '@/lib/constellations';
 import Footer from '@/components/Footer';
 import { prisma } from '@/lib/prisma';
 import { formatDate } from '@/lib/utils';
@@ -19,6 +21,7 @@ export default async function ThreadPage({ params }: { params: { id: string } })
 
   return (
     <>
+      <StarBackground constellations={DISCUSS_SKY} />
       <Navigation />
       <main className="pt-24">
         <div className="section-container max-w-3xl py-12">

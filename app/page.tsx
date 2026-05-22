@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import Hero from '@/components/Hero';
 import Navigation from '@/components/Navigation';
+import StarBackground from '@/components/StarBackground';
+import { HOME_SKY } from '@/lib/constellations';
 import Footer from '@/components/Footer';
 import StatsCounter from '@/components/StatsCounter';
 import BlogCard from '@/components/BlogCard';
@@ -61,6 +63,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <StarBackground constellations={HOME_SKY} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation />
       <main>

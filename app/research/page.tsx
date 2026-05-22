@@ -2,6 +2,8 @@ export const dynamic = 'force-dynamic';
 
 import type { Metadata } from 'next';
 import Navigation from '@/components/Navigation';
+import StarBackground from '@/components/StarBackground';
+import { RESEARCH_SKY } from '@/lib/constellations';
 import Footer from '@/components/Footer';
 import { prisma } from '@/lib/prisma';
 import ResearchFilter from './ResearchFilter';
@@ -128,6 +130,7 @@ export default async function ResearchPage() {
 
   return (
     <>
+      <StarBackground constellations={RESEARCH_SKY} />
       <Navigation />
       <main className="pt-24">
         <section className="section-container py-12">
