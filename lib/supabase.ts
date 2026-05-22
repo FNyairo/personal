@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-key';
 
 // Client-side (anon) — safe to expose
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -16,6 +16,10 @@ export async function uploadDocument(
   file: File,
   threadId: string
 ): Promise<{ url: string | null; error: string | null }> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    return { url: null, error: 'Storage not configured.' };
+  }
+
   const ext = file.name.split('.').pop();
   const path = `threads/${threadId}/${Date.now()}.${ext}`;
 
