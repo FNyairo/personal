@@ -1,6 +1,5 @@
 'use client';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
-import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { useState } from 'react';
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
@@ -22,6 +21,12 @@ export default function VisitorMap({ data }: { data: CountryData[] }) {
 
   return (
     <div className="relative">
+      {/* Simple tooltip */}
+      {tooltip && (
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10 bg-navy-800 text-white text-xs px-3 py-1.5 rounded-lg border border-white/10 pointer-events-none">
+          {tooltip}
+        </div>
+      )}
       <ComposableMap
         projectionConfig={{ scale: 140 }}
         style={{ width: '100%', height: 'auto', background: 'transparent' }}
@@ -44,7 +49,6 @@ export default function VisitorMap({ data }: { data: CountryData[] }) {
                     hover: { fill: '#14B8A6', outline: 'none', cursor: 'pointer' },
                     pressed: { fill: '#0D9488', outline: 'none' },
                   }}
-                  data-tooltip-id="map-tip"
                   onMouseEnter={() =>
                     setTooltip(match ? `${match.country}: ${match.count} visit${match.count > 1 ? 's' : ''}` : '')
                   }
@@ -68,8 +72,6 @@ export default function VisitorMap({ data }: { data: CountryData[] }) {
           );
         })}
       </ComposableMap>
-
-      <ReactTooltip id="map-tip" content={tooltip} />
 
       {/* Legend */}
       <div className="flex items-center gap-2 mt-3 text-xs text-slate-500">
