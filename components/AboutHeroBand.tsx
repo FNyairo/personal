@@ -2,37 +2,40 @@
 import { useEffect, useRef } from 'react';
 
 // ── STATIC anchors — core identity ───────────────────────────────────────────
+// Two-column layout: left col @ 25%, center @ 50%, right col @ 75%
 const STATIC_KEYWORDS = [
-  { text: 'Instructional Design', x: 0.02, y: 0.52, align: 'left'   },
   { text: 'Teacher Education',    x: 0.25, y: 0.18, align: 'center' },
+  { text: 'Instructional Design', x: 0.25, y: 0.82, align: 'center' },
   { text: 'Doctoral Researcher',  x: 0.50, y: 0.52, align: 'center' },
-  { text: 'Maritime English',     x: 0.75, y: 0.86, align: 'center' },
-  { text: 'Project Management',   x: 0.98, y: 0.52, align: 'right'  },
+  { text: 'Project Management',   x: 0.75, y: 0.18, align: 'center' },
+  { text: 'Maritime English',     x: 0.75, y: 0.82, align: 'center' },
 ];
 
 // ── DYNAMIC clusters — each word orbits its anchor ───────────────────────────
+// Tighter orbitR on shared-column anchors (0 & 1, 3 & 4) to prevent overlap
 const CLUSTERS = [
-  // Instructional Design (index 0) — Far Left
-  { text: 'Blended Learning',        anchorIndex: 0, orbitR: 0.14 },
-  { text: 'Learning Analytics',      anchorIndex: 0, orbitR: 0.13 },
-  { text: 'Design-Based Research',   anchorIndex: 0, orbitR: 0.16 },
+  // Teacher Education (index 0) — Left col, top
+  { text: 'TPACK by Design',               anchorIndex: 0, orbitR: 0.10 },
+  { text: 'Universal Design for Learning', anchorIndex: 0, orbitR: 0.12 },
+  { text: 'Mixed Methods',                 anchorIndex: 0, orbitR: 0.09 },
 
-  // Teacher Education (index 1) — Top Left
-  { text: 'TPACK by Design',               anchorIndex: 1, orbitR: 0.13 },
-  { text: 'Universal Design for Learning', anchorIndex: 1, orbitR: 0.16 },
-  { text: 'Mixed Methods',                 anchorIndex: 1, orbitR: 0.12 },
+  // Instructional Design (index 1) — Left col, bottom
+  { text: 'Blended Learning',        anchorIndex: 1, orbitR: 0.10 },
+  { text: 'Learning Analytics',      anchorIndex: 1, orbitR: 0.09 },
+  { text: 'Design-Based Research',   anchorIndex: 1, orbitR: 0.11 },
 
   // Doctoral Researcher (index 2) — Center
   { text: 'Education Technology', anchorIndex: 2, orbitR: 0.13 },
-  { text: 'Finland · Kenya',      anchorIndex: 2, orbitR: 0.14 },
+  { text: 'Kenya >< Finland',     anchorIndex: 2, orbitR: 0.14 },
 
-  // Maritime English (index 3) — Bottom Right
-  { text: 'STCW', anchorIndex: 3, orbitR: 0.10 },
-  { text: 'SMCP', anchorIndex: 3, orbitR: 0.10 },
+  // Project Management (index 3) — Right col, top
+  { text: 'Corporate Training & Communication', anchorIndex: 3, orbitR: 0.11 },
+  { text: 'Data Analytics',                     anchorIndex: 3, orbitR: 0.09 },
 
-  // Project Management (index 4) — Far Right
-  { text: 'Corporate Training & Communication', anchorIndex: 4, orbitR: 0.15 },
-  { text: 'Data Analytics',                     anchorIndex: 4, orbitR: 0.12 },
+  // Maritime English (index 4) — Right col, bottom
+  { text: 'STCW', anchorIndex: 4, orbitR: 0.08 },
+  { text: 'SMCP', anchorIndex: 4, orbitR: 0.08 },
+  { text: 'IMO',  anchorIndex: 4, orbitR: 0.10 },
 ];
 
 const COLORS = [
