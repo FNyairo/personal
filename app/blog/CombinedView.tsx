@@ -163,7 +163,7 @@ function Inner({ posts, threads }: { posts: Post[]; threads: Thread[] }) {
                         </div>
                         <div className="flex items-center gap-3 flex-shrink-0">
                           {thread.documentUrl && (
-                            <FileText className="w-4 h-4 text-teal-400" title="Has document" />
+                            <FileText className="w-4 h-4 text-teal-400" aria-label="Has document" />
                           )}
                           <div className="flex items-center gap-1 text-slate-400 text-xs">
                             <MessageSquare className="w-3.5 h-3.5" />
