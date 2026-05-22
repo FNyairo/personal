@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
-import { prisma } from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://franklinnyairo.com';
@@ -15,10 +16,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
   ];
 
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-    select: { slug: true, updatedAt: true },
-  }).catch(() => []);
+  // Only query DB if DATABASE_URL is configured
+  let posts: { slug: string; updatedAt: Date }[] = [];
+  if (process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('your-')) {
+    const { prisma } = await import('@/lib/prisma');
+    posts = await prisma.post.findMany({
+      where: { published: true },
+      select: { slug: true, updatedAt: true },
+    }).catch(() => []);
+  }
 
   const postRoutes: MetadataRoute.Sitemap = posts.map((p) => ({
     url: `${baseUrl}/blog/${p.slug}`,
