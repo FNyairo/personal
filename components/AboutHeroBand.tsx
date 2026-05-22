@@ -2,12 +2,13 @@
 import { useEffect, useRef } from 'react';
 
 // ── STATIC keywords — core identity, fixed positions ─────────────────────────
+// align: 'left' | 'center' | 'right'
 const STATIC_KEYWORDS = [
-  { text: 'Instructional Design', x: 0.12, y: 0.28 },
-  { text: 'Teacher Education',    x: 0.38, y: 0.55 },
-  { text: 'Maritime English',     x: 0.62, y: 0.30 },
-  { text: 'Project Management',   x: 0.82, y: 0.58 },
-  { text: 'PhD Researcher',       x: 0.50, y: 0.20 },
+  { text: 'Instructional Design', x: 0.02, y: 0.52, align: 'left'   }, // Left, middle
+  { text: 'Teacher Education',    x: 0.50, y: 0.18, align: 'center' }, // Top, center
+  { text: 'Doctoral Researcher',  x: 0.50, y: 0.55, align: 'center' }, // Center, middle
+  { text: 'Maritime English',     x: 0.50, y: 0.88, align: 'center' }, // Bottom, center
+  { text: 'Project Management',   x: 0.98, y: 0.52, align: 'right'  }, // Right, middle
 ];
 
 // ── DYNAMIC keywords — methods & frameworks, drift around ────────────────────
@@ -72,12 +73,13 @@ export default function AboutHeroBand() {
     function initDrift() {
       const w = canvas!.offsetWidth;
       const h = canvas!.offsetHeight;
+      // Keep words well inside — use 20%–80% of width, 15%–85% of height
       driftRef.current = DYNAMIC_KEYWORDS.map((text) => ({
         text,
-        x: Math.random() * (w - 160) + 80,
-        y: Math.random() * (h - 24) + 16,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
+        x: w * 0.20 + Math.random() * w * 0.55,
+        y: h * 0.15 + Math.random() * h * 0.70,
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: (Math.random() - 0.5) * 0.28,
         fontSize: Math.random() * 4 + 16,
         opacity: Math.random() * 0.35 + 0.15,
         targetOpacity: Math.random() * 0.45 + 0.20,
@@ -96,9 +98,18 @@ export default function AboutHeroBand() {
         kw.x += kw.vx;
         kw.y += kw.vy;
 
-        const pad = 90;
-        if (kw.x < pad || kw.x > w - pad) kw.vx *= -1;
-        if (kw.y < 16  || kw.y > h - 16)  kw.vy *= -1;
+        // Measure text width so long phrases bounce before clipping
+        ctx!.font = `400 ${kw.fontSize}px Inter, sans-serif`;
+        const textW = ctx!.measureText(kw.text).width;
+        const leftBound  = w * 0.12;
+        const rightBound = w * 0.88 - textW;
+        const topBound   = h * 0.12;
+        const botBound   = h * 0.88;
+
+        if (kw.x < leftBound)  { kw.x = leftBound;  kw.vx = Math.abs(kw.vx); }
+        if (kw.x > rightBound) { kw.x = rightBound; kw.vx = -Math.abs(kw.vx); }
+        if (kw.y < topBound)   { kw.y = topBound;   kw.vy = Math.abs(kw.vy); }
+        if (kw.y > botBound)   { kw.y = botBound;   kw.vy = -Math.abs(kw.vy); }
 
         // Pulse opacity
         if (kw.opacity < kw.targetOpacity) {
@@ -118,17 +129,24 @@ export default function AboutHeroBand() {
         const x = kw.x * w;
         const y = kw.y * h;
         ctx!.font = `600 20px Inter, sans-serif`;
-        ctx!.fillStyle = 'rgba(248,255,255,0.72)';
+        ctx!.textAlign = kw.align as CanvasTextAlign;
+        ctx!.fillStyle = 'rgba(248,255,255,0.78)';
         ctx!.fillText(kw.text, x, y);
 
-        // Subtle underline accent
+        // Subtle teal underline accent
         const metrics = ctx!.measureText(kw.text);
+        let lineX = x;
+        if (kw.align === 'center') lineX = x - metrics.width / 2;
+        if (kw.align === 'right')  lineX = x - metrics.width;
         ctx!.beginPath();
-        ctx!.moveTo(x, y + 4);
-        ctx!.lineTo(x + metrics.width, y + 4);
-        ctx!.strokeStyle = 'rgba(45,212,191,0.35)';
+        ctx!.moveTo(lineX, y + 4);
+        ctx!.lineTo(lineX + metrics.width, y + 4);
+        ctx!.strokeStyle = 'rgba(45,212,191,0.40)';
         ctx!.lineWidth = 1.5;
         ctx!.stroke();
+
+        // Reset alignment for dynamic words
+        ctx!.textAlign = 'left';
       });
 
       animRef.current = requestAnimationFrame(draw);
