@@ -78,7 +78,7 @@ export default function AboutHeroBand() {
         y: Math.random() * (h - 24) + 16,
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
-        fontSize: Math.random() * 4 + 11,
+        fontSize: Math.random() * 4 + 16,
         opacity: Math.random() * 0.35 + 0.15,
         targetOpacity: Math.random() * 0.45 + 0.20,
         opacitySpeed: Math.random() * 0.003 + 0.001,
@@ -117,7 +117,7 @@ export default function AboutHeroBand() {
       STATIC_KEYWORDS.forEach((kw) => {
         const x = kw.x * w;
         const y = kw.y * h;
-        ctx!.font = `600 16px Inter, sans-serif`;
+        ctx!.font = `600 20px Inter, sans-serif`;
         ctx!.fillStyle = 'rgba(248,255,255,0.72)';
         ctx!.fillText(kw.text, x, y);
 
