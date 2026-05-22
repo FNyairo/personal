@@ -23,19 +23,26 @@ const CLUSTERS = [
   { text: 'Blended Learning',        anchorIndex: 1, orbitR: 0.10 },
   { text: 'Learning Analytics',      anchorIndex: 1, orbitR: 0.09 },
   { text: 'Design-Based Research',   anchorIndex: 1, orbitR: 0.11 },
+  { text: 'ADDIE',                   anchorIndex: 1, orbitR: 0.08 },
 
-  // Doctoral Researcher (index 2) — Center
-  { text: 'Education Technology', anchorIndex: 2, orbitR: 0.13 },
-  { text: 'Kenya >< Finland',     anchorIndex: 2, orbitR: 0.14 },
+  // Doctoral Researcher (index 2) — Center (expanded orbits as focal point)
+  { text: 'Education Technology', anchorIndex: 2, orbitR: 0.16 },
+  { text: 'Kenya >< Finland',     anchorIndex: 2, orbitR: 0.17 },
+  { text: 'EFL',                  anchorIndex: 2, orbitR: 0.15 },
+  { text: 'Pre-service Teachers', anchorIndex: 2, orbitR: 0.18 },
+  { text: 'Comparative Study',    anchorIndex: 2, orbitR: 0.16 },
 
   // Project Management (index 3) — Right col, top
-  { text: 'Corporate Training & Communication', anchorIndex: 3, orbitR: 0.11 },
-  { text: 'Data Analytics',                     anchorIndex: 3, orbitR: 0.09 },
+  { text: 'Corporate Training', anchorIndex: 3, orbitR: 0.10 },
+  { text: 'Communication',      anchorIndex: 3, orbitR: 0.08 },
+  { text: 'Data Analytics',     anchorIndex: 3, orbitR: 0.09 },
+  { text: 'EU Projects',        anchorIndex: 3, orbitR: 0.11 },
 
   // Maritime English (index 4) — Right col, bottom
-  { text: 'STCW', anchorIndex: 4, orbitR: 0.08 },
-  { text: 'SMCP', anchorIndex: 4, orbitR: 0.08 },
-  { text: 'IMO',  anchorIndex: 4, orbitR: 0.10 },
+  { text: 'STCW',               anchorIndex: 4, orbitR: 0.08 },
+  { text: 'SMCP',               anchorIndex: 4, orbitR: 0.08 },
+  { text: 'IMO',                anchorIndex: 4, orbitR: 0.10 },
+  { text: 'Simulator Training', anchorIndex: 4, orbitR: 0.11 },
 ];
 
 const COLORS = [
@@ -47,6 +54,7 @@ const COLORS = [
   'rgba(196,181,253,',   // lavender
   'rgba(147,197,253,',   // pale blue
   'rgba(248,255,255,',   // near white
+  'rgba(251,191,36,',    // amber/gold accent
 ];
 
 type DriftWord = {
