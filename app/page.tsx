@@ -63,7 +63,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <StarBackground constellations={HOME_SKY} />
+      <StarBackground constellations={HOME_SKY} milkyWay />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation />
       <main>

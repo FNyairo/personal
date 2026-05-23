@@ -4,9 +4,86 @@ import type { Constellation } from '@/lib/constellations';
 
 interface Props {
   constellations: Constellation[];
+  milkyWay?: boolean;
 }
 
-export default function StarBackground({ constellations }: Props) {
+// ── Milky Way micro-stars ─────────────────────────────────────────────────────
+// Pre-generated with a seeded PRNG so positions are deterministic across
+// renders (no flickering from Math.random() in the draw loop).
+function seededRng(seed: number) {
+  let s = seed;
+  return () => {
+    s = Math.imul(s, 1664525) + 1013904223 | 0;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
+const MW_STARS = (() => {
+  const rng = seededRng(42);
+  const stars: { bx: number; by: number; opacity: number }[] = [];
+  for (let i = 0; i < 300; i++) {
+    const bx = rng() * 1.5 - 0.25;           // -0.25→1.25 along band
+    const raw = (rng() - 0.5) * 2;            // -1→1 uniform
+    const by  = Math.sign(raw) * raw * raw * 0.5; // cubic: dense at centre
+    const distFromMid = Math.abs(bx - 0.5);   // 0 = galactic core
+    const coreBoost   = Math.max(0, 1 - distFromMid * 1.6);
+    const opacity     = Math.min((rng() * 0.07 + 0.04) * (1 + coreBoost * 0.6), 0.14);
+    stars.push({ bx, by, opacity });
+  }
+  return stars;
+})();
+
+// Draws the Milky Way band as a diagonal gradient + micro-star field.
+// Everything is rendered in a rotated coordinate space so the band is
+// diagonal without needing to calculate rotated positions by hand.
+function drawMilkyWay(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  // ── Galactic core blob (normal coordinate space, no rotation) ────────────
+  // A soft radial glow near the visual centre of the page.
+  const coreX = w * 0.52;
+  const coreY = h * 0.48;
+  const coreR = Math.min(w, h) * 0.28;
+  const coreGrad = ctx.createRadialGradient(coreX, coreY, 0, coreX, coreY, coreR);
+  coreGrad.addColorStop(0,   'rgba(210,205,255,0.055)');
+  coreGrad.addColorStop(0.45,'rgba(185,190,255,0.028)');
+  coreGrad.addColorStop(1,   'rgba(160,170,255,0)');
+  ctx.fillStyle = coreGrad;
+  ctx.fillRect(0, 0, w, h);
+
+  // ── Diagonal band (rotated coordinate space) ──────────────────────────────
+  ctx.save();
+  ctx.translate(w / 2, h / 2);
+  ctx.rotate(-Math.PI / 6.5);      // ~28° diagonal
+  ctx.translate(-w / 2, -h / 2);
+
+  const bandCY  = h / 2;
+  const halfH   = h * 0.17;        // half-height of the star-dense region
+
+  // Soft gradient glow across the band
+  const bandGrad = ctx.createLinearGradient(0, bandCY - halfH * 2.4, 0, bandCY + halfH * 2.4);
+  bandGrad.addColorStop(0,    'rgba(155,170,255,0)');
+  bandGrad.addColorStop(0.22, 'rgba(160,175,255,0.022)');
+  bandGrad.addColorStop(0.44, 'rgba(185,195,255,0.042)');
+  bandGrad.addColorStop(0.5,  'rgba(200,208,255,0.052)');  // core glow
+  bandGrad.addColorStop(0.56, 'rgba(185,195,255,0.042)');
+  bandGrad.addColorStop(0.78, 'rgba(160,175,255,0.022)');
+  bandGrad.addColorStop(1,    'rgba(155,170,255,0)');
+  ctx.fillStyle = bandGrad;
+  ctx.fillRect(-w * 0.2, bandCY - halfH * 2.4, w * 1.4, halfH * 4.8);
+
+  // Micro-star field within the band
+  MW_STARS.forEach(({ bx, by, opacity }) => {
+    const sx = bx * w;
+    const sy = bandCY + by * halfH;
+    ctx.beginPath();
+    ctx.arc(sx, sy, 0.65, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(222,234,255,${opacity})`;
+    ctx.fill();
+  });
+
+  ctx.restore();
+}
+
+export default function StarBackground({ constellations, milkyWay = false }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef   = useRef<number>(0);
 
@@ -40,6 +117,10 @@ export default function StarBackground({ constellations }: Props) {
       const h = window.innerHeight;
       ctx!.clearRect(0, 0, w, h);
 
+      // ── Milky Way — deepest layer ───────────────────────────────────────
+      if (milkyWay) drawMilkyWay(ctx!, w, h);
+
+      // ── Constellations ──────────────────────────────────────────────────
       let idx = 0;
       constellations.forEach((constellation) => {
         // Connection lines
@@ -82,7 +163,7 @@ export default function StarBackground({ constellations }: Props) {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener('resize', resize);
     };
-  }, [constellations]);
+  }, [constellations, milkyWay]);
 
   return (
     <canvas
