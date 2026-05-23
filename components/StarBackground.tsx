@@ -27,7 +27,7 @@ const MW_STARS = (() => {
     const by  = Math.sign(raw) * raw * raw * 0.5; // cubic: dense at centre
     const distFromMid = Math.abs(bx - 0.5);   // 0 = galactic core
     const coreBoost   = Math.max(0, 1 - distFromMid * 1.6);
-    const opacity     = Math.min((rng() * 0.07 + 0.04) * (1 + coreBoost * 0.6), 0.14);
+    const opacity     = Math.min((rng() * 0.16 + 0.10) * (1 + coreBoost * 0.8), 0.35);
     stars.push({ bx, by, opacity });
   }
   return stars;
@@ -43,8 +43,8 @@ function drawMilkyWay(ctx: CanvasRenderingContext2D, w: number, h: number) {
   const coreY = h * 0.48;
   const coreR = Math.min(w, h) * 0.28;
   const coreGrad = ctx.createRadialGradient(coreX, coreY, 0, coreX, coreY, coreR);
-  coreGrad.addColorStop(0,   'rgba(210,205,255,0.055)');
-  coreGrad.addColorStop(0.45,'rgba(185,190,255,0.028)');
+  coreGrad.addColorStop(0,   'rgba(210,205,255,0.14)');
+  coreGrad.addColorStop(0.45,'rgba(185,190,255,0.07)');
   coreGrad.addColorStop(1,   'rgba(160,170,255,0)');
   ctx.fillStyle = coreGrad;
   ctx.fillRect(0, 0, w, h);
@@ -61,11 +61,11 @@ function drawMilkyWay(ctx: CanvasRenderingContext2D, w: number, h: number) {
   // Soft gradient glow across the band
   const bandGrad = ctx.createLinearGradient(0, bandCY - halfH * 2.4, 0, bandCY + halfH * 2.4);
   bandGrad.addColorStop(0,    'rgba(155,170,255,0)');
-  bandGrad.addColorStop(0.22, 'rgba(160,175,255,0.022)');
-  bandGrad.addColorStop(0.44, 'rgba(185,195,255,0.042)');
-  bandGrad.addColorStop(0.5,  'rgba(200,208,255,0.052)');  // core glow
-  bandGrad.addColorStop(0.56, 'rgba(185,195,255,0.042)');
-  bandGrad.addColorStop(0.78, 'rgba(160,175,255,0.022)');
+  bandGrad.addColorStop(0.22, 'rgba(160,175,255,0.06)');
+  bandGrad.addColorStop(0.44, 'rgba(185,195,255,0.11)');
+  bandGrad.addColorStop(0.5,  'rgba(200,208,255,0.14)');  // core glow
+  bandGrad.addColorStop(0.56, 'rgba(185,195,255,0.11)');
+  bandGrad.addColorStop(0.78, 'rgba(160,175,255,0.06)');
   bandGrad.addColorStop(1,    'rgba(155,170,255,0)');
   ctx.fillStyle = bandGrad;
   ctx.fillRect(-w * 0.2, bandCY - halfH * 2.4, w * 1.4, halfH * 4.8);
@@ -76,7 +76,7 @@ function drawMilkyWay(ctx: CanvasRenderingContext2D, w: number, h: number) {
     const sy = bandCY + by * halfH;
     ctx.beginPath();
     ctx.arc(sx, sy, 0.65, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(222,234,255,${opacity})`;
+    ctx.fillStyle = `rgba(230,240,255,${opacity})`;
     ctx.fill();
   });
 
@@ -169,7 +169,7 @@ export default function StarBackground({ constellations, milkyWay = false }: Pro
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-full h-full pointer-events-none"
-      style={{ zIndex: 0 }}
+      style={{ zIndex: 0, mixBlendMode: 'screen' }}
       aria-hidden="true"
     />
   );
