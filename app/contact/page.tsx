@@ -34,13 +34,49 @@ export default function ContactPage() {
               </p>
 
               <div className="space-y-4">
+
+                {/* Location */}
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-electric-500/10 flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-4 h-4 text-electric-400" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500 mb-0.5">Location</p>
+                    <p className="text-sm text-slate-300">Helsinki, Finland</p>
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-electric-500/10 flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-4 h-4 text-electric-400" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500 mb-1">Email</p>
+                    <div className="space-y-1">
+                      <div><a href="mailto:franklin.nyairo@novia.fi" className="text-sm text-slate-300 hover:text-electric-400 transition-colors">franklin.nyairo@novia.fi</a> <span className="text-xs text-slate-500">(work)</span></div>
+                      <div><a href="mailto:franklin.nyairo@helsinki.fi" className="text-sm text-slate-300 hover:text-electric-400 transition-colors">franklin.nyairo@helsinki.fi</a> <span className="text-xs text-slate-500">(university)</span></div>
+                      <div><a href="mailto:nyairo7@gmail.com" className="text-sm text-slate-300 hover:text-electric-400 transition-colors">nyairo7@gmail.com</a> <span className="text-xs text-slate-500">(personal)</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Phone */}
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-electric-500/10 flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-4 h-4 text-electric-400" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500 mb-1">Phone</p>
+                    <div className="space-y-1">
+                      <div><a href="tel:+358504701260" className="text-sm text-slate-300 hover:text-electric-400 transition-colors">+358 50 470 1260</a> <span className="text-xs text-slate-500">(work)</span></div>
+                      <div><a href="tel:+358449266252" className="text-sm text-slate-300 hover:text-electric-400 transition-colors">+358 44 926 6252</a> <span className="text-xs text-slate-500">(home)</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Links */}
                 {[
-                  { icon: Mail, label: 'Email (work)', value: 'franklin.nyairo@novia.fi', href: 'mailto:franklin.nyairo@novia.fi' },
-                  { icon: Mail, label: 'Email (university)', value: 'franklin.nyairo@helsinki.fi', href: 'mailto:franklin.nyairo@helsinki.fi' },
-                  { icon: Mail, label: 'Email (personal)', value: 'nyairo7@gmail.com', href: 'mailto:nyairo7@gmail.com' },
-                  { icon: MapPin, label: 'Location', value: 'Helsinki, Finland', href: null },
-                  { icon: Phone, label: 'Phone (work)', value: '+358 50 470 1260', href: 'tel:+358504701260' },
-                  { icon: Phone, label: 'Phone (home)', value: '+358 44 926 6252', href: 'tel:+358449266252' },
                   { icon: ExternalLink, label: 'LinkedIn', value: 'linkedin.com/in/spaceandortime', href: 'https://www.linkedin.com/in/spaceandortime/' },
                   { icon: BookOpen, label: 'ResearchGate', value: 'researchgate.net/profile/Franklin_Nyairo', href: 'https://www.researchgate.net/profile/Franklin_Nyairo' },
                   { icon: GraduationCap, label: 'Google Scholar', value: 'scholar.google.com', href: 'https://scholar.google.com/citations?user=Franklin_Nyairo' },
@@ -51,15 +87,12 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-xs text-slate-500 mb-0.5">{label}</p>
-                      {href ? (
-                        <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
-                          className="text-sm text-slate-300 hover:text-electric-400 transition-colors">{value}</a>
-                      ) : (
-                        <p className="text-sm text-slate-300">{value}</p>
-                      )}
+                      <a href={href} target="_blank" rel="noopener noreferrer"
+                        className="text-sm text-slate-300 hover:text-electric-400 transition-colors">{value}</a>
                     </div>
                   </div>
                 ))}
+
               </div>
             </div>
 
