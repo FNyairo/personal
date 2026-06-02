@@ -12,7 +12,6 @@ const STATIC_KEYWORDS = [
 ];
 
 // ── DYNAMIC clusters — each word orbits its anchor ───────────────────────────
-// Tighter orbitR on shared-column anchors (0 & 1, 3 & 4) to prevent overlap
 const CLUSTERS = [
   // Teacher Education (index 0) — Left col, top
   { text: 'TPACK by Design',               anchorIndex: 0, orbitR: 0.10 },
@@ -56,6 +55,7 @@ const COLORS = [
   'rgba(248,255,255,',   // near white
   'rgba(251,191,36,',    // amber/gold accent
 ];
+
 
 type DriftWord = {
   text: string;

@@ -49,16 +49,10 @@ export default function ResumePage() {
           <ResumeSection id="education" title="Education">
             {[
               {
-                degree: 'PhD in Educational Sciences (in progress)',
-                inst: 'University of Helsinki, Finland',
-                years: '2020–2026',
-                desc: 'Doctoral Programme in School, Education, Society, and Culture. Two-article mixed-methods / DBR dissertation examining TPACK development among EFL pre-service teachers in Finland and Kenya. Expected completion: July 2026.',
-              },
-              {
-                degree: 'MSc Maritime Digital Solutions (incoming)',
-                inst: 'Tallinn University of Technology (TalTech), Estonia',
-                years: 'Aug 2026–',
-                desc: 'Maritime data analytics, AI, IoT, Python. Thesis linked to Novia University of Applied Sciences maritime research agenda.',
+                degree: 'Bachelor of Education (English)',
+                inst: 'Kenyatta University, Kenya',
+                years: '2002',
+                desc: 'English and Literature pedagogy. Teaching practice in Kenyan secondary schools.',
               },
               {
                 degree: 'MA Educational Sciences',
@@ -73,10 +67,16 @@ export default function ResumePage() {
                 desc: 'Language acquisition, discourse analysis, second language writing, applied linguistics.',
               },
               {
-                degree: 'Bachelor of Education (English)',
-                inst: 'Kenyatta University, Kenya',
-                years: '2002',
-                desc: 'English and Literature pedagogy. Teaching practice in Kenyan secondary schools.',
+                degree: 'PhD in Educational Sciences (in progress)',
+                inst: 'University of Helsinki, Finland',
+                years: '2020–2026',
+                desc: 'Doctoral Programme in School, Education, Society, and Culture. Two-article mixed-methods / DBR dissertation examining TPACK development among EFL pre-service teachers in Finland and Kenya. Expected completion: July 2026.',
+              },
+              {
+                degree: 'MSc Maritime Digital Solutions (incoming)',
+                inst: 'Tallinn University of Technology (TalTech), Estonia',
+                years: 'Aug 2026–',
+                desc: 'Maritime data analytics, AI, IoT, Python. Thesis linked to Novia University of Applied Sciences maritime research agenda.',
               },
             ].map((edu) => (
               <TimelineItem key={edu.degree} title={edu.degree} subtitle={edu.inst} years={edu.years} desc={edu.desc} />

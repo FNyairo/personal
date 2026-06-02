@@ -4,7 +4,7 @@ import StarBackground from '@/components/StarBackground';
 import { CONTACT_SKY } from '@/lib/constellations';
 import Footer from '@/components/Footer';
 import ContactForm from './ContactForm';
-import { MapPin, Mail, Phone, ExternalLink, BookOpen } from 'lucide-react';
+import { MapPin, Mail, Phone, ExternalLink, BookOpen, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Contact Me',
@@ -35,11 +35,15 @@ export default function ContactPage() {
 
               <div className="space-y-4">
                 {[
-                  { icon: Mail, label: 'Email', value: 'franklin.nyairo@novia.fi', href: 'mailto:franklin.nyairo@novia.fi' },
-                  { icon: MapPin, label: 'Location', value: 'Novia University of Applied Sciences, Vantaa, Finland', href: null },
-                  { icon: Phone, label: 'Phone', value: '+358 50 470 1260', href: 'tel:+358504701260' },
+                  { icon: Mail, label: 'Email (work)', value: 'franklin.nyairo@novia.fi', href: 'mailto:franklin.nyairo@novia.fi' },
+                  { icon: Mail, label: 'Email (university)', value: 'franklin.nyairo@helsinki.fi', href: 'mailto:franklin.nyairo@helsinki.fi' },
+                  { icon: Mail, label: 'Email (personal)', value: 'nyairo7@gmail.com', href: 'mailto:nyairo7@gmail.com' },
+                  { icon: MapPin, label: 'Location', value: 'Helsinki, Finland', href: null },
+                  { icon: Phone, label: 'Phone (work)', value: '+358 50 470 1260', href: 'tel:+358504701260' },
+                  { icon: Phone, label: 'Phone (home)', value: '+358 44 926 6252', href: 'tel:+358449266252' },
                   { icon: ExternalLink, label: 'LinkedIn', value: 'linkedin.com/in/spaceandortime', href: 'https://www.linkedin.com/in/spaceandortime/' },
                   { icon: BookOpen, label: 'ResearchGate', value: 'researchgate.net/profile/Franklin_Nyairo', href: 'https://www.researchgate.net/profile/Franklin_Nyairo' },
+                  { icon: GraduationCap, label: 'Google Scholar', value: 'scholar.google.com', href: 'https://scholar.google.com/citations?user=Franklin_Nyairo' },
                 ].map(({ icon: Icon, label, value, href }) => (
                   <div key={label} className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-lg bg-electric-500/10 flex items-center justify-center flex-shrink-0">

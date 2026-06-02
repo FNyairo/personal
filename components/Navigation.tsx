@@ -62,13 +62,11 @@ export default function Navigation() {
 
             {/* Right side */}
             <div className="flex items-center gap-3">
-              {/* CTA */}
               <Link href="/book" className="hidden md:flex btn-primary text-sm py-2 px-4">
                 <ExternalLink className="w-4 h-4" />
                 Book a Chat
               </Link>
 
-              {/* Mobile hamburger */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
                 className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-all"

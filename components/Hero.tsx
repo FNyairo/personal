@@ -215,7 +215,7 @@ export default function Hero() {
             leading maritime RDI projects that bridge simulator-based training with
             evidence-based instructional design. PhD Candidate at the University of Helsinki
             researching TPACK development in Finnish and Kenyan EFL teacher education.
-            Based in Vantaa, Finland.
+            Based in Helsinki, Finland.
           </motion.p>
 
           {/* CTAs */}
