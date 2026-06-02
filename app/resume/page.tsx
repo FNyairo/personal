@@ -63,19 +63,19 @@ export default function ResumePage() {
               {
                 degree: 'MA Educational Sciences',
                 inst: 'University of Turku, Finland',
-                years: '2017–2019',
+                years: '2013',
                 desc: 'Specialisation in curriculum studies, instructional design, and competence-based education.',
               },
               {
                 degree: 'MA English Philology',
                 inst: 'University of Helsinki, Finland',
-                years: '2014–2017',
+                years: '2019',
                 desc: 'Language acquisition, discourse analysis, second language writing, applied linguistics.',
               },
               {
                 degree: 'Bachelor of Education (English)',
                 inst: 'Kenyatta University, Kenya',
-                years: '2007–2011',
+                years: '2002',
                 desc: 'English and Literature pedagogy. Teaching practice in Kenyan secondary schools.',
               },
             ].map((edu) => (
